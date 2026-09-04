@@ -1,0 +1,53 @@
+
+
+use master
+
+go
+
+create DataBase SistemaVendas
+
+go
+
+use SistemaVendas
+
+create Table Produtos (
+	codProd		Int Identity(1,1) primary key,
+	produto		varchar(30),
+	quantEst	int,
+	preco		money
+) 
+
+-- delete from Produtos
+-- Insere valores na tabela
+Insert Into Produtos(produto, quantEst, preco)
+		Values('Lápis', '12000', '1')
+
+Insert Into Produtos(produto, quantEst, preco)
+		Values('Régua', '500', '7')
+
+Insert Into Produtos(produto, quantEst, preco)
+		Values('Caderno', '200', '300'),
+			  ('Apontador', '800', '5'),
+			  ('Caneta', '5000', '6')
+				
+
+
+SELECT * FROM PRODUTOS
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
