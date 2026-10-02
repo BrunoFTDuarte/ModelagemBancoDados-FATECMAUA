@@ -1,0 +1,119 @@
+Use master
+GO
+if exists (select * from sysdatabases where name = 'Imobiliaria')
+	  use master
+      drop database Imobiliaria
+      
+go      
+  SET DATEFORMAT dmy
+      
+  GO
+
+
+
+
+  CREATE DATABASE Imobiliaria
+  go
+
+use Imobiliaria
+  go 
+CREATE TABLE Proprietarios (
+	codProprietario		int			 not null identity (1,1) primary key,
+	proprietario		nvarchar(30) null,
+	endereco			nvarchar(50) null,
+	bairro				nvarchar(30) null,
+	cidade				nvarchar(30) null,
+	estado				nvarchar(15) null,
+	pais				nvarchar(20) null,
+	telefone			nvarchar(15) null
+ )
+       
+-----------------------------------------------------------------------------
+
+CREATE TABLE Corretores (
+	codCorretor			int			 not null identity (1,1) primary key,
+	corretor			nvarchar(30) null,
+	telefone			nvarchar(50) null,
+	email				nvarchar(30) null,
+	bairro				nvarchar(30) null,
+	salario				money		 null,
+	cidade				nvarchar(30) null,
+	estado				nvarchar(15) null,
+	pais				nvarchar(20) null
+)
+	
+-----------------------------------------------------------------------------
+
+
+CREATE TABLE Clientes (
+	codCliente			int			 not null identity (1,1) primary key,
+	cliente				nvarchar(30) null,
+	endereco			nvarchar(50) null,
+	bairro				nvarchar(30) null,
+	cidade				nvarchar(30) null,
+	estado				nvarchar(15) null default('São Paulo'),
+	pais				nvarchar(20) null,
+	renda				money		 not null,
+	telefone			nvarchar(15) not null
+ )
+       
+-----------------------------------------------------------------------------
+
+CREATE TABLE Imoveis (
+	codImovel			int			 not null identity (1,1) primary key,
+	codProprietario		int			 null,
+	endereco			nvarchar(50) null,
+	bairro				nvarchar(30) null,
+	cidade				nvarchar(30) null,
+	estado				nvarchar(15) null default('São Paulo'),
+	pais				nvarchar(20) null default('Brasil'),
+	tipo				nvarchar(20) null,
+	tamanho				int,
+	valor				money,
+	disponivel			bit,
+	transacao			nvarchar(20) null,
+		CONSTRAINT FKpro_imo FOREIGN KEY (codProprietario)
+					  REFERENCES proprietarios (codProprietario)
+ )
+       
+-----------------------------------------------------------------------------
+
+CREATE TABLE Visitas (
+	codVisita			int			  not null identity (1,1) primary key,
+	codCorretor			int			  null,
+	codCliente			int			  null,
+	codImovel			int			  null,
+	datahora			datetime	  null,
+	proposta			nvarchar(500) null,
+	CONSTRAINT FKvis_cor FOREIGN KEY (codCorretor)
+						REFERENCES corretores (codCorretor),
+
+	CONSTRAINT FKvis_cli FOREIGN KEY (codCliente)
+						REFERENCES clientes (codCliente),
+
+	CONSTRAINT FKvis_imo FOREIGN KEY (codImovel)
+						REFERENCES Imoveis (codImovel)
+
+ )
+       
+-----------------------------------------------------------------------------
+
+
+Anotações
+
+comece sempre criando as tabelas nas pontas (tabelas que possuem apenas uma ligação)
+e para as tabelas que não estão na ponta, sempre a tabela que o relacionamento "para 1", será criada, e a para muitos, será criado após.
+
+
+nvarchar - Padrão internacional
+varchar - Ocupa menos espaço na memória
+
+
+
+
+Referenciar uma chave primaria de uma outra tabela como uma foreign key
+
+
+
+CONSTRAINT nome_da_linha FOREIGN KEY (nome_da_chave_estrangeira)
+					  REFERENCES nome_da_tabela (nome da_coluna)
